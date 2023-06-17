@@ -1,0 +1,49 @@
+class Solution:
+    def removeDuplicates(self, nums):
+        i = 0
+        for n in nums:
+            if i < 2 or n > nums[i-2]:
+                nums[i] = n
+                i += 1
+        return i
+# replace i with k and you have a solution for k most duplicates problem.
+
+class Solution:
+    def removeDuplicates(self, nums):
+        i = 0
+        for n in nums:
+            if i < k or n > nums[i-k]:
+                nums[i] = n
+                i += 1
+        return i
+    
+########################################################################
+
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        freq = {}
+        for n in nums:
+            if n in freq:
+                freq[n] += 1
+            else:
+                freq[n] = 1
+                
+        uniqueElements = [nums[0]]
+        for i in range(1, len(nums)):
+            if uniqueElements[-1] != nums[i]:
+                uniqueElements.append(nums[i])
+        
+        i = 0
+        for n in uniqueElements:
+            if freq[n] == 1:
+                nums[i] = n
+                i += 1
+            else:
+                nums[i] = n
+                nums[i+1] = n
+                i += 2
+                
+        return i
+        
+                
+        
