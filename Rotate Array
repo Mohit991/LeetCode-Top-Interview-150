@@ -1,0 +1,109 @@
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        #we can shift elements one by one k times to get the result.
+        L = len(nums)
+        for i in range(k):
+            last = nums[-1]
+            for j in range(L-1, 0, -1):
+                nums[j] = nums[j-1]
+            nums[0] = last
+            
+            
+#################################################################
+
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        L = len(nums)
+        k = k % L #if k == L then there will be not rotations. If k > L then we only
+        #need k % L rotations becuase k / L rotations mean the same array.
+        part = L - k
+        firstHalf = nums[:part]
+        secondHalf = nums[part:]
+        i = 0
+        # print(firstHalf)
+        # print(secondHalf)
+        for j in range(len(secondHalf)):
+            nums[i] = secondHalf[j]
+            i += 1
+        
+        for j in range(len(firstHalf)):
+            nums[i] = firstHalf[j]
+            i += 1
+            
+#################################################################
+
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        newNums = [val for val in nums]
+        L = len(nums)
+        k = k % L
+        part = L - k
+        
+        for i in range(L):
+            # if part == L:
+            #     part = 0
+                
+            nums[i] = newNums[part % L]
+            part += 1
+    
+    
+#################################################################
+# Reverse the array first. Then reverse the two parts which we need to swap to get the 
+# result. 
+
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        L = len(nums)
+        k = k % L
+        front, back = 0, L - 1
+        
+        while front < back:
+            temp = nums[front]
+            nums[front] = nums[back]
+            nums[back] = temp
+            front += 1
+            back -= 1
+                        
+        front, back = 0, k - 1
+        while front < back:
+            temp = nums[front]
+            nums[front] = nums[back]
+            nums[back] = temp
+            front += 1
+            back -= 1
+            
+        front, back = k, L - 1
+        while front < back:
+            temp = nums[front]
+            nums[front] = nums[back]
+            nums[back] = temp
+            front += 1
+            back -= 1
+            
+            
+###############################################################
+
+class Solution:
+    def reverseArray(self, nums, front, back):
+        while front < back:
+            nums[front], nums[back] = nums[back], nums[front]
+            front, back = front + 1, back - 1
+            
+    def rotate(self, nums: List[int], k: int) -> None:
+        L = len(nums)
+        k = k % L
+        front, back = 0, L - 1
+        self.reverseArray(nums, 0, L - 1)
+        self.reverseArray(nums, 0, k - 1)
+        self.reverseArray(nums, k, L - 1)
+            
+            
+        
+            
+        
+        
+                            
+        
