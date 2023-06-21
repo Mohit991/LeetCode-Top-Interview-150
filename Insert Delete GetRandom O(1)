@@ -1,0 +1,53 @@
+# We want to take a random value from all the values we have in the set. 
+# We need two DS here, one map(numsMap) which will map our value to its index in the 
+# array(numsList). When we insert, we first insert in the list and then we add the val
+# as key and the last index of list as its value(bc the value which we just added in the
+# list is added at the last index.)
+# When we delete the element we will need to also remove this element from the list. 
+# in order to do that, we get the index of this element using the map. Once we have the
+# index, we will copy the last element of the list to this index and simply pop the array
+# thus removing the last element from the list.
+# also we need to update the new index for the last element in the map.
+# for that we simply use this statement: self.numsMap[self.numsList[i]] = i
+# Once we are done, we will simply remove this element from the map as well. 
+
+# For the random function we will simply find a random number between 0 and len(list)
+# We can return the value at that index in the list. 
+
+class RandomizedSet:
+
+    def __init__(self):
+        self.numsMap = {}
+        self.numsList = []
+
+    def insert(self, val: int) -> bool:
+        if val not in self.numsMap:
+            self.numsList.append(val)
+            self.numsMap[val] = len(self.numsList) - 1
+            return True
+        else:
+            return False
+
+    def remove(self, val: int) -> bool:
+        if val in self.numsMap:
+            i = self.numsMap[val]
+            self.numsList[i] = self.numsList[-1]
+            self.numsMap[self.numsList[i]] = i
+            self.numsList.pop()
+            self.numsMap.pop(val)
+            return True
+        else:
+            return False
+        
+
+    def getRandom(self) -> int:
+        i = random.randrange(0, len(self.numsList))
+        return self.numsList[i]
+        
+
+
+# Your RandomizedSet object will be instantiated and called as such:
+# obj = RandomizedSet()
+# param_1 = obj.insert(val)
+# param_2 = obj.remove(val)
+# param_3 = obj.getRandom()
