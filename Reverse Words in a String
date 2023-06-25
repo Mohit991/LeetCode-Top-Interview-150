@@ -1,0 +1,43 @@
+# Create a empty string result.
+# We will use a variable wordEnd to tell us the index of the end of the word for every word. Also, we will use firstWord boolean to tell us if this is the first word of the stirng or not. This is because first word required special cases. 
+
+# Traverse the string from end to start. 
+# Ignore any white spaces if your wordEnd is -1 which indicates that you have not found the last char of current word. 
+
+# If you see a char and wordEnd is -1 then put wordEnd = i, since it is the last char of current word. 
+
+# If you see a white space now, that means the word is over. Add this word to the result. 
+# If it is first word then we dont need to add the white space else we add the white space.
+
+# See the other conditions as well.
+
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        result = ''
+        wordEnd = -1
+        firstWord = True
+        
+        for i in range(len(s)-1, -1, -1):
+            if wordEnd == -1 and s[i] == ' ':
+                continue
+            if wordEnd == -1:
+                wordEnd = i
+            
+            if s[i] == ' ' or  i == 0:
+                if firstWord:
+                    if i == 0:
+                        result += s[i:wordEnd+1]
+                    else:
+                        result += s[i+1:wordEnd+1]
+                        firstWord = False
+                else:
+                    if s[i] != ' ' and i == 0:
+                        result += ' ' + s[i:wordEnd+1]
+                    else:
+                        result += s[i:wordEnd+1]
+                wordEnd = -1
+                
+        return result
+        
+            
