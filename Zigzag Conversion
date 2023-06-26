@@ -1,0 +1,36 @@
+# We will create an array of slots equal to numRows. We will keep each line of the zig zag
+# in this array. Each slot will contain a list of chars.
+
+# Now we will go through s and we will fill the array with the appropirate values. 
+# when we go from top to bottom in the zig zag, we will put chars in the array.
+# when we come back up, we will put chars in the arrays expect for last and first list.
+# This is beacuse that is how the zig zag works.
+
+# Once done we will take all the chars and add them to the result, row by row and return.
+
+class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows == 1:
+            return s
+        
+        rows = [[] for i in range(numRows)]
+        i = 0
+        while i < len(s):
+            for j in range(numRows):
+                if i == len(s):
+                    break
+                rows[j].append(s[i])
+                i += 1
+            for j in range(numRows-2, 0, -1):
+                if i == len(s):
+                    break
+                rows[j].append(s[i])
+                i += 1
+                
+        # print(rows)
+        res = ''
+        for i in range(len(rows)):
+            for j in range(len(rows[i])):
+                res += rows[i][j]
+                
+        return res
