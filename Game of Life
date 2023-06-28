@@ -1,0 +1,185 @@
+# We will do the below mapping:
+# Original Value --> Updated Value : Value we will use
+#               0 --> 0 : 0
+#               1 --> 0 : 1
+#               0 --> 1 : 2
+#               1 --> 1 : 3
+# it means that if 0 gets modified to 0 we will use 0 in the board to represent that. 
+# If 1 is converted to 0 then we will use 1 to represent that. 
+# If 0 is converted to 1 then we will use 2 to represent that.
+# If 1 is converted to 1 then we will use 3 to represent that.
+
+# This way we will be able to save updated values in the board and we can also
+# refer to the old values at the same time. We need these old values to update next values.
+
+# So 1,3 means that original value was one and 0,2 means original value was 2.
+# We will use 1,3 values to find the alive cells and update the board.
+
+# In the end we will go through the board and update the values as follows:
+# 0 -- > 0
+# 1 -- > 0
+# 2,3 --> 1
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        
+        R = len(board)
+        C = len(board[0])
+        
+        for i in range(R):
+            for j in range(C):
+                alive = 0
+                if i > 0:
+                    top = board[i-1][j]
+                    if top == 1 or top == 3:
+                        alive += 1
+                        
+                if i < R - 1:
+                    bottom = board[i+1][j]
+                    if bottom == 1 or bottom == 3:
+                        alive += 1
+                        
+                if j > 0:
+                    left = board[i][j-1]
+                    if left == 1 or left == 3:
+                        alive += 1
+                        
+                if j < C - 1:
+                    right = board[i][j+1]
+                    if right == 1 or right == 3:
+                        alive += 1
+                    
+                if i > 0 and j < C - 1:
+                    rightTop = board[i-1][j+1]
+                    if rightTop == 1 or rightTop == 3:
+                        alive += 1
+                        
+                if i < R - 1 and j < C - 1:
+                    rightBottom = board[i+1][j+1]
+                    if rightBottom == 1 or rightBottom == 3:
+                        alive += 1
+                        
+                if i > 0 and j > 0:
+                    leftTop = board[i-1][j-1]
+                    if leftTop == 1 or leftTop == 3:
+                        alive += 1
+                        
+                if i < R - 1 and j > 0:
+                    leftBottom = board[i+1][j-1]
+                    if leftBottom == 1 or leftBottom == 3:
+                        alive += 1
+                
+                # if board[i][j] == 0 and (alive <= 2 or alive > 3):
+                #     board[i][j] = 0
+                
+                if board[i][j] == 0 and alive == 3:
+                    board[i][j] = 2
+                
+                # if board[i][j] == 1 and (alive < 2 or alive > 3):
+                #     board[i][j] = 1
+                
+                if board[i][j] == 1 and (alive == 2 or alive == 3):
+                    board[i][j] = 3
+                    
+        for i in range(R):
+            for j in range(C):
+                if board[i][j] == 1:
+                    board[i][j] = 0
+                elif board[i][j] == 2 or board[i][j] == 3:
+                    board[i][j] = 1
+                    
+
+####################################################################################
+
+# We can also solve this by using 2 extra rows. 
+#That is not O(1) time I guess!
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        
+        # print(temp)
+        R = len(board)
+        C = len(board[0])
+        temp = [[0 for i in range(C)] for i in range(2)]
+        
+        for i in range(R):
+            for j in range(C):
+                alive = 0
+                if i > 0:
+                    top = board[i-1][j]
+                    if top == 1:
+                        alive += 1
+                        
+                if i < R - 1:
+                    bottom = board[i+1][j]
+                    if bottom == 1:
+                        alive += 1
+                        
+                if j > 0:
+                    left = board[i][j-1]
+                    if left == 1:
+                        alive += 1
+                        
+                if j < C - 1:
+                    right = board[i][j+1]
+                    if right == 1:
+                        alive += 1
+                    
+                if i > 0 and j < C - 1:
+                    rightTop = board[i-1][j+1]
+                    if rightTop == 1:
+                        alive += 1
+                        
+                if i < R - 1 and j < C - 1:
+                    rightBottom = board[i+1][j+1]
+                    if rightBottom == 1:
+                        alive += 1
+                        
+                if i > 0 and j > 0:
+                    leftTop = board[i-1][j-1]
+                    if leftTop == 1:
+                        alive += 1
+                        
+                if i < R - 1 and j > 0:
+                    leftBottom = board[i+1][j-1]
+                    if leftBottom == 1:
+                        alive += 1
+                
+                if i == 0 or i == 1:
+                    if alive < 2:
+                        temp[i][j] = 0
+                    elif alive == 2:
+                        temp[i][j] = board[i][j]
+                    elif alive == 3:
+                        temp[i][j] = 1
+                    elif alive > 3:
+                        temp[i][j] = 0
+                else:
+                    if alive < 2:
+                        temp[1][j] = 0
+                    elif alive == 2:
+                        temp[1][j] = board[i][j]
+                    elif alive == 3:
+                        temp[1][j] = 1
+                    elif alive > 3:
+                        temp[1][j] = 0
+        
+            if i >= 1:
+                for k in range(C):
+                    board[i-1][k] = temp[0][k]
+                    
+                for k in range(C):
+                    temp[0][k] = temp[1][k]
+                    
+        for k in range(C):
+                    board[R-1][k] = temp[0][k] 
+    
+                    
+                
+        
+                
+                    
