@@ -1,0 +1,91 @@
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s.
+
+ 
+
+Example 1:
+
+Input: pattern = "abba", s = "dog cat cat dog"
+Output: true
+Example 2:
+
+Input: pattern = "abba", s = "dog cat cat fish"
+Output: false
+Example 3:
+
+Input: pattern = "aaaa", s = "dog cat cat dog"
+Output: false
+
+
+class Solution:
+    def wordPattern(self, pattern: str, s: str) -> bool:
+        mapping = {}
+        alreadyMapped = set()
+        wordEnd = False
+        patternEnd = False
+        
+        j = 0
+        k = 0
+        for i in range(len(pattern)):
+            while k < len(s):
+                if s[k] == ' ':
+                    word = s[j: k]
+                    j = k + 1
+                    k += 1
+                    break
+                elif k == len(s) - 1:
+                    word = s[j: k+1]
+                    wordEnd = True
+                k += 1
+                
+            # print(word)
+            if pattern[i] in mapping:
+                mappingOfWord = mapping[pattern[i]]
+                if word != mappingOfWord:
+                    return False
+            else:
+                if word in alreadyMapped:
+                    return False
+                mapping[pattern[i]] = word
+                alreadyMapped.add(word)
+            
+            if i == len(pattern) - 1:
+                patternEnd = True
+        
+        if patternEnd and wordEnd:
+            return True  
+        
+        return False
+    
+################################################################
+
+class Solution:
+    def wordPattern(self, pattern: str, s: str) -> bool:
+        words =  s.split(' ')
+        # print(words)
+        
+        if len(words) != len(pattern):
+            return False
+        
+        mapping = {}
+        alreadyMappedWord = set()
+        
+        
+        for i in range(len(words)):
+            if pattern[i] in mapping:
+                mappingOfWord = mapping[pattern[i]]
+                if mappingOfWord != words[i]:
+                    return False
+            else:
+                if words[i] in alreadyMappedWord:
+                    return False
+                mapping[pattern[i]] = words[i]
+                alreadyMappedWord.add(words[i])
+                
+        return True
+            
+            
+        
+        
+        
