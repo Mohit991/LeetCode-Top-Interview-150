@@ -42,17 +42,27 @@ class Solution:
                 output = 0
                 sign = 1
                 
-            #If we see ')', then we will use sign to get the current val ie output
-            #then we will use stack.pop() to get the last sign and update output. 
-            #Then again we will pop from stack and add it to output(if it is
-            #negative then it is automatically subtracted.)
+            
+            #We we see ')', that means first we need to finished the inner 
+            #calculation ie between (). If you notice when we get ')', we have not
+            #finished the calculation because we come directly to this branch. 
+            #in order to finish last calculation of (), we have to write two
+            #statements here. Once last calculation is complete, we not put a sign
+            #to the output, this is because whatever was the sign before '('
+            #that should be the sign of the whole expression(output).
+            #eg 1 - (3+2) means 1 - (5) and sign of 5 should be '-'
+            #so we put sign to output and add it to the stack top. 
+            #This may be addition or subtraction depending on the sign. 
             elif c == ')':
-                output += current * sign
+                output += current * sign 
+                current = 0
+                
                 output = output * stack.pop() #This is also a sign ie -1 or 1
                 output += stack.pop() #this is the last result
-                current = 0
+                
         
         #If there are no left or right parans in the equation, in that case
-        #We will have to add current * sign(making current negative if thats the             #case) to the output and return that. 
+        #We will have to add current * sign(making current negative if thats the
+        #case) to the output and return that. 
         return output + (current * sign)
             
