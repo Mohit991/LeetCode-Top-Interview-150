@@ -1,0 +1,58 @@
+class Solution:
+    def calculate(self, s: str) -> int:
+        # sign == 1 means +
+        # sign == -1 means -
+        # By default the sign is + i.e. 1
+        
+        current, output, sign, stack = 0, 0, 1, []
+        
+        for c in s:
+            #Here we are trying to find the current number
+            #since current number can be of multiple digits hence we need to do 
+            #these calculations. 
+            if c.isdigit(): 
+                current = current * 10 + int(c)
+                
+            #when we see a sign, we will update our current number to + or -.
+            #To do so, we will use the sign we saw last time, remmeber the sign
+            #is + by default. So, if we did not see any sign last time, then 
+            #the number is made positive. 
+            #we set output to current and current to zero, bc from now on we want
+            #to find new current(second value for our calculation)
+            #We also update the sign variable to -1 or +1, because we will use this
+            #to assign sign to the next value we will find. 
+            elif c in '+-':
+                output += current*sign
+                current = 0 
+                if c == '-':
+                    sign = -1
+                else:
+                    sign = 1
+                    
+            #If we see '(', we will append output and sign to the stack. 
+            #We need to do this because if we see '(' we will 100% see ')'
+            #And when we see ')' we will use the stack to get the value and sign for
+            #the calculation. 
+            #we will also reset output and sign, because inside '(', we will have
+            #to do new calculations and we can use stack to do this unifinished 
+            #calculation.
+            elif c == '(':
+                stack.append(output)
+                stack.append(sign)
+                output = 0
+                sign = 1
+                
+            #If we see ')', then we will use sign to get the current val ie output
+            #then we will use stack.pop() to get the last sign and update output. 
+            #Then again we will pop from stack and add it to output(if it is
+            #negative then it is automatically subtracted.)
+            elif c == ')':
+                output += current * sign
+                output = output * stack.pop() #This is also a sign ie -1 or 1
+                output += stack.pop() #this is the last result
+                current = 0
+        
+        #If there are no left or right parans in the equation, in that case
+        #We will have to add current * sign(making current negative if thats the             #case) to the output and return that. 
+        return output + (current * sign)
+            
