@@ -1,0 +1,81 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        
+        if left == right:
+            return head
+        
+        temp = head
+        previousLeft = None
+        leftValue = 1
+        while temp:
+            if leftValue == left:
+                leftNode = temp
+                current = temp
+                prev = None
+                while 1:
+                    # print(current.val)
+                    t1 = current.next
+                    current.next = prev
+                    prev = current
+                    current = t1
+                    if leftValue == right:
+                        break
+                    leftValue += 1
+                if previousLeft:
+                    previousLeft.next = prev
+                else:
+                    head = prev
+                    
+                leftNode.next = current
+                if not current and not previousLeft:
+                    return prev
+                else:
+                    return head
+                
+            leftValue += 1
+            previousLeft = temp
+            temp = temp.next
+        
+#####################################################################
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        
+        if left == right:
+            return head
+        
+        dummy = ListNode(0, head) #Dummy node points to head
+        leftPrev, current = dummy, head
+        
+        #Step 1: Reach node which is represented by left; move left - 1 times in LL
+        for i in range(left - 1):
+            leftPrev = current
+            current = current.next
+        
+        #Step 2: Reverse the LL from left to right; reverse right - left + 1 nodes
+        #starting from left node
+        prev = None
+        for i in range(right - left + 1):
+            tempNext = current.next
+            current.next = prev
+            prev = current
+            current = tempNext
+        
+        #Step 3: Update the pointers on left node and node before left. 
+        leftPrev.next.next = current
+        leftPrev.next = prev
+        
+        #Return dummy.next because dummy is fake node created to avoid cornor cases.
+        return dummy.next
+        
+        
