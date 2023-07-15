@@ -1,0 +1,134 @@
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+# Insertion Sort:
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode(-inf)
+        sortedHead = dummy
+        
+        temp = head
+        while temp:
+            val = temp.val
+            temp1 = sortedHead
+            prev = None
+            while temp1 and temp1.val < val:
+                prev = temp1
+                temp1 = temp1.next
+            newNode = ListNode(val)
+            if not temp1:
+                prev.next = newNode
+            else:
+                newNode.next = prev.next
+                prev.next = newNode
+            temp = temp.next      
+        return sortedHead.next
+        
+# Bubble Sort:
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        length = 0
+        temp = head
+        while temp:
+            length += 1
+            temp = temp.next
+            
+        for i in range(length-1, -1, -1):
+            temp = head
+            swaps = False
+            for j in range(i):
+                if temp.val > temp.next.val:
+                    temp.val, temp.next.val = temp.next.val, temp.val
+                    swaps = True
+                temp = temp.next
+            if not swaps:
+                break
+        return head
+    
+# Selection Sort:
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        sortedHead = ListNode(inf)
+        temp1 = sortedHead
+        
+        temp = head
+        while temp:
+            minVal = temp.val
+            temp2 = temp
+            prev = None
+            minNodePrev, minNode = None, temp
+            while temp2:
+                if temp2.val < minVal:
+                    minVal = temp2.val
+                    minNodePrev = prev
+                    minNode = temp2
+                prev = temp2
+                temp2 = temp2.next
+            
+            if not minNodePrev:
+                head = head.next        
+            else:
+                minNodePrev.next = minNode.next
+
+            temp1.next = ListNode(minVal)
+            temp1 = temp1.next
+            temp = head
+        return sortedHead.next
+    
+# Merge Sort:
+# We will keep dividing the list until we get lists of just one node
+# Then we will merge the list using merge function. 
+# We will write a getMiddle method to get the middle node to split the list. 
+# To get this, we will use slow and fast pointer method.
+# We will use merge() to merge the lists. 
+# TC - O(n logn)
+# SC - O(log n) due to recursion. 
+
+class Solution:
+    def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+        
+        left = head
+        mid = self.getMiddle(head)
+        right = mid.next
+        mid.next = None
+        
+        left = self.sortList(left)
+        right = self.sortList(right)
+        return self.merge(left, right)
+    
+    def getMiddle(self, temp):
+        slow, fast = temp, temp.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+    
+    def merge(self, left, right):
+        temp = ListNode()
+        mergedHead = temp
+        while left and right:
+            if left.val < right.val:
+                temp.next = left
+                left = left.next
+            else:
+                temp.next = right
+                right = right.next
+            temp = temp.next 
+        if left:
+            temp.next = left
+        if right:
+            temp.next = right    
+        return mergedHead.next
+        
+        
+
+    
+    
+            
+
+        
