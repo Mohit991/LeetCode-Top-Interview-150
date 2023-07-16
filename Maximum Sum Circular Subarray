@@ -1,0 +1,60 @@
+# The idea is very simple:
+# We will calulcate the sum till now ie currentSum, currentSum is the sum calculated
+# so far, now we have a new number num. If adding the current Sum and num gives us
+# bigger number than num, then that means that it is a better choice(greedy) to 
+# add num to current sum, but if the adding current sum with num does not improve num
+# ie currentSum + num < num then that means it is better to take the num independently
+# since adding current sum to it is only decreasing it.
+
+# Use the same logic to get min sum. Now either the globalMaxSum is greater or 
+# totalSum - globalMinSum is greater, whichever is return that. 
+
+class Solution:
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        globalMaxSum, currentMaxSum = -inf, 0
+        globalMinSum, currentMinSum = inf, 0
+        totalSum = 0
+        
+        for num in nums:
+            if currentMaxSum + num > num:
+                currentMaxSum = currentMaxSum + num
+            else:
+                currentMaxSum = num
+            
+            if currentMinSum + num < num:
+                currentMinSum = currentMinSum + num
+            else:
+                currentMinSum = num      
+            
+            globalMaxSum = max(globalMaxSum, currentMaxSum)
+            globalMinSum = min(globalMinSum, currentMinSum)
+            totalSum += num
+        
+        if globalMaxSum < 0:
+            return globalMaxSum
+        
+        return max(globalMaxSum, totalSum - globalMinSum)
+
+#######################################################################
+
+class Solution:
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        globalMaxSum, currentMaxSum = -inf, 0
+        globalMinSum, currentMinSum = inf, 0
+        totalSum = 0
+        
+        for num in nums:
+            currentMaxSum += num
+            currentMinSum += num
+            globalMaxSum = max(globalMaxSum, currentMaxSum)
+            globalMinSum = min(globalMinSum, currentMinSum)
+            totalSum += num
+            if currentMaxSum < 0:
+                currentMaxSum = 0
+            if currentMinSum > 0:
+                currentMinSum = 0
+        
+        if globalMaxSum < 0:
+            return globalMaxSum
+        
+        return max(globalMaxSum, totalSum - globalMinSum)
