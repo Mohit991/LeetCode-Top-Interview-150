@@ -1,0 +1,25 @@
+# We can create a memo array which will keep the min values. 
+# we will put last value from grid to memo and then start from end to beginning. 
+# memo[i][j] = min(memo[i+1][j], memo[i][j+1]) + grid[i][j]
+# But we have to keep track of boundry conditions for i and j.
+# Also, we can reuse the grid array if we want. 
+
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        rows = len(grid)
+        cols = len(grid[0])
+        
+        memo = [[inf for i in range(cols)] for i in range(rows)]
+        memo[-1][-1] = grid[-1][-1]
+        
+        for i in range(rows - 1, -1, -1):
+            for j in range(cols - 1, -1, -1):
+                if i == rows-1 and j == cols-1:
+                    continue
+                if i < rows - 1:
+                    memo[i][j] = memo[i+1][j]
+                if j < cols - 1:
+                     memo[i][j] = min(memo[i][j], memo[i][j+1])
+                memo[i][j] += grid[i][j]
+                
+        return memo[0][0]
